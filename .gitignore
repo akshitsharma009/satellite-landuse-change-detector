@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual Environment
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# VS Code
+.vscode/
+
+# Operating System
+.DS_Store
+Thumbs.db
+
+# Model Checkpoints
+*.pth
+*.pt
+*.ckpt
+
+# Logs
+*.log
+
+# Outputs (keep folder structure only)
+outputs/logs/*
+!outputs/logs/.gitkeep
+
+# Large datasets
+data/raw/
+data/processed/
+
+# Temporary files
+*.tmp
+*.bak
+# Generated outputs
+outputs/figures/*
+outputs/metrics/*
+!outputs/figures/.gitkeep
+!outputs/metrics/.gitkeep
