@@ -1,17 +1,19 @@
 """
 dataset.py
 ----------
-Utilities for loading and inspecting the EuroSAT dataset.
+Utilities for exploring and loading the EuroSAT dataset.
 """
 
 from pathlib import Path
 from collections import Counter
+
 from PIL import Image
+from torch.utils.data import Dataset
 
 from src.config import EUROSAT_DIR
 
 
-class EuroSATDataset:
+class EuroSATExplorer:
     """
     Utility class for exploring the EuroSAT dataset.
     """
@@ -33,11 +35,9 @@ class EuroSATDataset:
         Return all class folders.
         """
         return sorted(
-            [
-                folder.name
-                for folder in self.dataset_path.iterdir()
-                if folder.is_dir()
-            ]
+            folder.name
+            for folder in self.dataset_path.iterdir()
+            if folder.is_dir()
         )
 
     def count_images(self):
@@ -70,7 +70,6 @@ class EuroSATDataset:
         """
         Print dataset summary.
         """
-
         counts = self.count_images()
 
         print("=" * 60)
@@ -92,7 +91,6 @@ class EuroSATDataset:
         """
         Verify dataset integrity and image resolutions.
         """
-
         total_images = 0
         corrupted_images = 0
         image_sizes = Counter()
@@ -126,3 +124,28 @@ class EuroSATDataset:
             print(f"{size} : {count}")
 
         print("=" * 60)
+
+
+class EuroSATDataset(Dataset):
+    """
+    PyTorch Dataset for training and evaluation.
+    """
+
+    def __init__(self, image_paths, labels, transform=None):
+        self.image_paths = image_paths
+        self.labels = labels
+        self.transform = transform
+
+    def __len__(self):
+        return len(self.image_paths)
+
+    def __getitem__(self, idx):
+        image_path = self.image_paths[idx]
+        label = self.labels[idx]
+
+        image = Image.open(image_path).convert("RGB")
+
+        if self.transform:
+            image = self.transform(image)
+
+        return image, label
