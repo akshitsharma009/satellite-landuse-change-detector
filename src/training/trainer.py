@@ -33,8 +33,8 @@ def train_one_epoch(
 
     for images, labels in progress_bar:
 
-        images = images.to(device)
-        labels = labels.to(device)
+        images = images.to(device, non_blocking=True)
+        labels = labels.to(device, non_blocking=True)
 
         optimizer.zero_grad()
 
@@ -54,13 +54,16 @@ def train_one_epoch(
 
         total_samples += labels.size(0)
 
-    epoch_loss = running_loss / len(dataloader)
+        progress_bar.set_postfix(
+            loss=f"{loss.item():.4f}"
+        )
 
-    epoch_accuracy = (
-    correct_predictions / total_samples
-) * 100
+    epoch_loss = running_loss / len(dataloader)
+    epoch_accuracy = (correct_predictions / total_samples) * 100
 
     return epoch_loss, epoch_accuracy
+
+
 def validate_one_epoch(
     model,
     dataloader,
@@ -87,8 +90,8 @@ def validate_one_epoch(
 
         for images, labels in progress_bar:
 
-            images = images.to(device)
-            labels = labels.to(device)
+            images = images.to(device, non_blocking=True)
+            labels = labels.to(device, non_blocking=True)
 
             outputs = model(images)
 
@@ -98,19 +101,16 @@ def validate_one_epoch(
 
             predictions = outputs.argmax(dim=1)
 
-            correct_predictions += (
-                predictions == labels
-            ).sum().item()
+            correct_predictions += (predictions == labels).sum().item()
 
             total_samples += labels.size(0)
 
     epoch_loss = running_loss / len(dataloader)
-
-    epoch_accuracy = (
-        correct_predictions / total_samples
-    )
+    epoch_accuracy = (correct_predictions / total_samples) * 100
 
     return epoch_loss, epoch_accuracy
+
+
 def fit(
     model,
     train_loader,
@@ -133,9 +133,9 @@ def fit(
 
     for epoch in range(epochs):
 
-        print(f"\n{'=' * 50}")
+        print("\n" + "=" * 50)
         print(f"Epoch [{epoch + 1}/{epochs}]")
-        print(f"{'=' * 50}")
+        print("=" * 50)
 
         train_loss, train_accuracy = train_one_epoch(
             model=model,
@@ -158,18 +158,13 @@ def fit(
         history["val_accuracy"].append(val_accuracy)
 
         print(
-    f"Train Loss: {train_loss:.4f} | "
-    f"Train Acc: {train_accuracy:.2f}%"
-)
+            f"Train Loss: {train_loss:.4f} | "
+            f"Train Acc: {train_accuracy:.2f}%"
+        )
 
         print(
-    f"Train Loss: {train_loss:.4f} | "
-    f"Train Acc: {train_accuracy:.2f}%"
-)
-
-        print(
-    f"Val Loss: {val_loss:.4f} | "
-    f"Val Acc: {val_accuracy:.2f}%"
-)
+            f"Val Loss: {val_loss:.4f} | "
+            f"Val Acc: {val_accuracy:.2f}%"
+        )
 
     return history
