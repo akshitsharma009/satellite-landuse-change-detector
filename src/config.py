@@ -81,3 +81,8 @@ def print_config():
     print(f"Image Size    : {IMAGE_SIZE}")
     print(f"Batch Size    : {BATCH_SIZE}")
     print("=" * 50)
+    # ----------------------------------------------------
+# Change Detection
+# ----------------------------------------------------
+
+CHANGE_THRESHOLD = 0.6345
