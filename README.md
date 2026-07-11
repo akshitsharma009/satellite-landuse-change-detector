@@ -510,7 +510,8 @@ B.Tech – Computer Science Engineering (AI)
 ### Connect with Me
 
 - GitHub: https://github.com/akshitsharma009
-- LinkedIn: *(Add your LinkedIn profile here)*
+- LinkedIn: www.linkedin.com/in/akshit-sharma-dev
+
 
 ---
 
