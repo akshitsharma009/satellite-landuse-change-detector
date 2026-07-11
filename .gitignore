@@ -17,10 +17,12 @@ venv/
 .DS_Store
 Thumbs.db
 
-# Model Checkpoints
+# Ignore checkpoints except deployment model
 *.pth
 *.pt
 *.ckpt
+
+!models/checkpoints/resnet18_finetuned.pth
 
 # Logs
 *.log
